@@ -1,10 +1,11 @@
+// tcl.com v1.0 (c) 2025 Pedro de Medeiros
 #include "msxgl.h"
 #include "dos.h"
 
 // Send command to Tcl engine
 bool tcl(char* s)
 {
-    s; // hl <- s
+    s; // assumption: hl <- s
     __asm
         // write address
         ld c, #6
@@ -21,7 +22,7 @@ bool tcl(char* s)
 void main(u8 argc, c8** argv)
 {
     if (argc < 1) {
-        DOS_StringOutput("tcl.com v1 (c) 2025 Pedro de Medeiros\r\n$");
+        DOS_StringOutput("tcl.com v1.0 (c) 2025 Pedro de Medeiros\r\n$");
         DOS_StringOutput("No arguments provided.$");
         DOS_Exit0();
     }
