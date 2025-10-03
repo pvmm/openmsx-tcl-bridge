@@ -14,7 +14,7 @@ tcl_bridge start
 ```
 on the Tcl console to connect the receiving and sending ports on the MSX side (ports 6 and 7 respectively). Now you can for instance call:
 ```
-tcl puts Hello world
+tcl puts "Hello world"
 ```
 on MSX-DOS command line to print "Hello world" on openMSX Tcl console, but you can use it to call `diskmanipulator` and automate stuff using OpenMSX. The sky is the limit!
 
