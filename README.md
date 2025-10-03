@@ -31,3 +31,9 @@ Just throw the directory inside a normal MSXgl install, specifically in the **pr
 build.sh tcl
 ```
 The resulting binary will be inside the **out** subdirectory.
+
+Related links
+-------------
+
+* The PR in OpenMSX of the Tcl script that completes the mechanism:
+  * https://github.com/openMSX/openMSX/pull/1985
