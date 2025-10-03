@@ -22,3 +22,12 @@ To close the bridge, just execute:
 ```
 tcl_bridge stop
 ```
+
+How to compile it
+-----------------
+
+Just throw the directory inside a normal MSXgl install, specifically in the **projects** subdirectory, then call:
+```
+build.sh tcl
+```
+The resulting binary will be inside the **out** subdirectory.
