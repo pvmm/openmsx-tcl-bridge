@@ -12,9 +12,13 @@ The tcl.com MSX-DOS program requires the **tcl_bridge.tcl** script on OpenMSX si
 ```
 tcl_bridge start
 ```
-on the Tcl console to connect the receiving and sending ports on the MSX side (ports 6 and 7 respectively). Now you can call:
-```tcl puts Hello world```
-On MSX-DOS command line to send Tcl commands to openMSX. To close the bridge, execute:
+on the Tcl console to connect the receiving and sending ports on the MSX side (ports 6 and 7 respectively). Now you can call for instance:
+```
+tcl puts Hello world
+```
+on MSX-DOS command line to print "Hello world" on openMSX Tcl console, but you can use it to call diskmanipulator and automate stuff using OpenMSX, the sky is the limit.
+
+To close the bridge, just execute:
 ```
 tcl_bridge stop
 ```
