@@ -2,21 +2,27 @@
 #include "msxgl.h"
 #include "dos.h"
 
+// Data to send to tcl_bridge
+struct {
+    c8* output;
+    c8* input;
+    u16 size;
+} tcl_data;
+
+#define SIZE 1000
+c8 input[SIZE];
+
 // Send command to Tcl engine
-bool tcl(char* s)
+c8* tcl(void* data)
 {
-    s; // assumption: hl <- s
+    data; // assumption: hl <- data
     __asm
         // write address
         ld c, #6
         out (c), l
         out (c), h
-        // read response
-        ld h, #0
-        ld c, #7
-        in l, (c)
     __endasm;
-    return s == 0;
+    return &input;
 }
 
 void main(u8 argc, c8** argv)
@@ -32,7 +38,10 @@ void main(u8 argc, c8** argv)
         argv[i][-1] = ' ';
     }
 
-    DOS_StringOutput(tcl(argv[0]) ? "OK$" : "ERROR$");
+    tcl_data.output = argv[0];
+    tcl_data.input  = input;
+    tcl_data.size   = SIZE;
+    DOS_StringOutput(tcl(&tcl_data));
     DOS_Exit0();
 }
 
