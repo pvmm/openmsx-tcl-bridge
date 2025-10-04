@@ -10,7 +10,7 @@ struct {
 } tcl_data;
 
 #define SIZE 1000
-c8 input[SIZE];
+c8 input[SIZE] = "tcl_bridge not running.$";
 
 // Send command to Tcl engine
 c8* tcl(void* data)
