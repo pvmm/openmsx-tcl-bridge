@@ -1,4 +1,8 @@
 // tcl.com v1.0 (c) 2025 Pedro de Medeiros
+//
+// tcl.com doesn't implement all details of tcl_bridge. Namely, it doesn't
+// treat input as a binary data.
+
 #include "msxgl.h"
 #include "dos.h"
 
