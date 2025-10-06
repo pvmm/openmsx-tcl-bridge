@@ -34,6 +34,13 @@ void tcl(void* data)
     __endasm;
 }
 
+void print(c8* buffer, u16 length)
+{
+    for (int i = 0; i < length; ++i) {
+        DOS_CharOutput(buffer[i]);
+    }
+}
+
 void main(u8 argc, c8** argv)
 {
     if (argc < 1) {
@@ -52,17 +59,17 @@ void main(u8 argc, c8** argv)
     tcl_data.input       = input;
     tcl_data.input_max   = INPUT_MAX;
     tcl_data.status      = 0x7F;
+
     tcl(&tcl_data); // here tcl_data fields are magically filled in...
     if (tcl_data.status == 0x7F) {
         DOS_StringOutput("tcl_bridge not running.$");
     } else if (tcl_data.input_size > tcl_data.input_max) {
-        DOS_StringOutput("Buffer too small to receive full result.$");
+        print(input, tcl_data.input_size);
+        DOS_StringOutput("... truncated!\r\nBuffer too small to receive full result.$");
     } else if (tcl_data.input_size == 0) {
         DOS_StringOutput("Empty result.$");
     } else {
-        for (int i = 0; i < tcl_data.input_size; ++i) {
-            DOS_CharOutput(input[i]);
-        }
+        print(input, tcl_data.input_size);
     }
     DOS_Exit0();
 }
