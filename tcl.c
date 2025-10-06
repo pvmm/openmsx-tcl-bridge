@@ -8,6 +8,7 @@
 #include "msxgl.h"
 #include "dos.h"
 #include "string.h"
+#include "debug.h"
 
 // Data to send to tcl_bridge
 struct {

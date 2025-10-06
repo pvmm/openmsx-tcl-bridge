@@ -12,7 +12,7 @@ Target = "DOS1";
 DOSParseArg = true;
 
 //-- List of library modules to build (array)
-LibModules = [ "dos" ]; // , "string", "tool/reg", ...LibModules];
+LibModules = ["dos", "debug", "print", "vdp", ...LibModules];
 
 //-- List of data files to copy to disk (array)
 DiskFiles = [];
