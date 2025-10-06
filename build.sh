@@ -9,7 +9,7 @@
 clear
 
 if type -P node; then
-	node ../../engine/script/js/build.js projname=$1 target=$2
+	node ../../engine/script/js/build.js projname=tcl "$@"
 else
-	../../tools/build/Node/node ../../engine/script/js/build.js projname=$1 target=$2
+	../../tools/build/Node/node ../../engine/script/js/build.js projname=tcl "$@"
 fi

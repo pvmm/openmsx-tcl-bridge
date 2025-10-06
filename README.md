@@ -28,7 +28,7 @@ How to compile it
 
 Just throw the directory inside a normal MSXgl install, specifically in the **projects** subdirectory, then call:
 ```
-build.sh tcl
+build.sh
 ```
 The resulting binary will be inside the **out** subdirectory.
 
