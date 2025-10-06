@@ -54,7 +54,7 @@ void main(u8 argc, c8** argv)
     if (tcl_data.status == 0x7F) {
         DOS_StringOutput("tcl_bridge not running.$");
     } else {
-        input[tcl_data.input_size] = '$';
+        input[INPUT_MAX - (tcl_data.input_size == INPUT_MAX ? 1 : 0)] = '$';
         DOS_StringOutput(input);
     }
     DOS_Exit0();
