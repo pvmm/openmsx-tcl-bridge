@@ -50,7 +50,7 @@ void main(u8 argc, c8** argv)
     }
 
     // concatenate all command line parameters
-    for (u8 i = 0; i < argc; i++) {
+    for (u8 i = 1; i < argc; i++) {
         argv[i][-1] = ' ';
     }
 
