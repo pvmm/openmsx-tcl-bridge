@@ -50,17 +50,20 @@ void main(u8 argc, c8** argv)
     }
 
     // concatenate all command line parameters
-    for (u8 i = 1; i < argc; i++) {
-        argv[i][-1] = ' ';
+    u8* last_pos = argv[argc - 1] + String_Length(argv[argc - 1]) - 1;
+    for (u8* p = argv[0]; p < last_pos; ++p) {
+        if (*p == '\0') *p = ' ';
     }
 
+    // populate tcl_data and send to tcl_bridge
     tcl_data.output      = argv[0];
     tcl_data.output_size = String_Length(argv[0]);
     tcl_data.input       = input;
     tcl_data.input_max   = INPUT_MAX;
-    tcl_data.status      = 0x7F;
+    tcl_data.status      = 0x7F; // if this changes tcl_bridge is alive
 
     tcl(&tcl_data); // here tcl_data fields are magically filled in...
+
     if (tcl_data.status == 0x7F) {
         DOS_StringOutput("tcl_bridge not running.$");
     } else if (tcl_data.input_size > tcl_data.input_max) {
