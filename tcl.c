@@ -17,6 +17,7 @@ struct {
     u16 res_max_len;    // offset + 6
     u16 res_real_len;   // offset + 8
     i8  status;         // offset + 10
+    i8  res_modifier;   // offset + 11
 } tcl_data;
 
 #define RESPONSE_MAX 1000
@@ -60,6 +61,11 @@ void main(u8 argc, c8** argv)
     tcl_data.cmd_len      = String_Length(argv[0]);
     tcl_data.res_addr     = response;
     tcl_data.res_max_len  = RESPONSE_MAX;
+#ifdef MODIFIER
+    tcl_data.res_modifier = MODIFIER;
+#else
+    tcl_data.res_modifier = 0;
+#endif
     tcl_data.status       = 0x7F; // if this changes tcl_bridge is alive
 
     tcl(&tcl_data); // here tcl_data fields are magically filled in...
