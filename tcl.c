@@ -11,16 +11,16 @@
 
 // Data to send to tcl_bridge
 struct {
-    c8* output;         // offset + 0
-    u16 output_size;    // offset + 2
-    c8* input;          // offset + 4
-    u16 input_max;      // offset + 6
-    u16 input_size;     // offset + 8
+    c8* cmd_addr;       // offset + 0
+    u16 cmd_len;        // offset + 2
+    c8* res_addr;       // offset + 4
+    u16 res_max_len;    // offset + 6
+    u16 res_real_len;   // offset + 8
     i8  status;         // offset + 10
 } tcl_data;
 
-#define INPUT_MAX 1000
-c8 input[INPUT_MAX] = {0};
+#define RESPONSE_MAX 1000
+c8 response[RESPONSE_MAX] = {0};
 
 // Send command to Tcl engine
 void tcl(void* data)
@@ -56,11 +56,11 @@ void main(u8 argc, c8** argv)
     }
 
     // populate tcl_data and send to tcl_bridge
-    tcl_data.output      = argv[0];
-    tcl_data.output_size = String_Length(argv[0]);
-    tcl_data.input       = input;
-    tcl_data.input_max   = INPUT_MAX;
-    tcl_data.status      = 0x7F; // if this changes tcl_bridge is alive
+    tcl_data.cmd_addr     = argv[0];
+    tcl_data.cmd_len      = String_Length(argv[0]);
+    tcl_data.res_addr     = response;
+    tcl_data.res_max_len  = RESPONSE_MAX;
+    tcl_data.status       = 0x7F; // if this changes tcl_bridge is alive
 
     tcl(&tcl_data); // here tcl_data fields are magically filled in...
 
@@ -69,13 +69,13 @@ void main(u8 argc, c8** argv)
         DOS_Exit0();
     }
     if (tcl_data.status == 1) DOS_StringOutput("Error: $");
-    if (tcl_data.input_size > tcl_data.input_max) {
-        print(input, tcl_data.input_max);
+    if (tcl_data.res_real_len > tcl_data.res_max_len) {
+        print(response, tcl_data.res_max_len);
         DOS_StringOutput("... truncated!\r\nBuffer too small to receive full result.$");
-    } else if (tcl_data.input_size == 0) {
+    } else if (tcl_data.res_real_len == 0) {
         DOS_StringOutput("Empty result.$");
     } else {
-        print(input, tcl_data.input_size);
+        print(response, tcl_data.res_real_len);
     }
     DOS_Exit0();
 }
