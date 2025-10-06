@@ -18,7 +18,7 @@ struct {
 } tcl_data;
 
 #define INPUT_MAX 100
-c8 input[INPUT_MAX];
+c8 input[INPUT_MAX] = {0};
 
 // Send command to Tcl engine
 void tcl(void* data)
@@ -56,7 +56,7 @@ void main(u8 argc, c8** argv)
     } else if (tcl_data.input_size > tcl_data.input_max) {
         DOS_StringOutput("Buffer too small to receive full result.$");
     } else {
-        input[INPUT_MAX - (tcl_data.input_size == INPUT_MAX ? 1 : 0)] = '$';
+        input[(tcl_data.input_size == INPUT_MAX ? 1 : 0)] = '$';
         DOS_StringOutput(input);
     }
     DOS_Exit0();
