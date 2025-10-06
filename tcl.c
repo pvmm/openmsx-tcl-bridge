@@ -64,7 +64,7 @@ void main(u8 argc, c8** argv)
     if (tcl_data.status == 0x7F) {
         DOS_StringOutput("tcl_bridge not running.$");
     } else if (tcl_data.input_size > tcl_data.input_max) {
-        print(input, tcl_data.input_size);
+        print(input, tcl_data.input_max);
         DOS_StringOutput("... truncated!\r\nBuffer too small to receive full result.$");
     } else if (tcl_data.input_size == 0) {
         DOS_StringOutput("Empty result.$");
