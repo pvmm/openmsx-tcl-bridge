@@ -18,7 +18,7 @@ struct {
 } tcl_data;
 
 #define MAX 1000
-c8 input[MAX] = "tcl_bridge not running.$";
+c8 input[MAX];
 
 // Send command to Tcl engine
 void tcl(void* data)
@@ -49,9 +49,14 @@ void main(u8 argc, c8** argv)
     tcl_data.output_size = String_Length(argv[0]);
     tcl_data.input       = input;
     tcl_data.input_max   = MAX;
+    tcl_data.status      = 0x7F;
     tcl(&tcl_data); // here tcl_data fields are magically filled in...
-    input[tcl_data.input_size] = '$';
-    DOS_StringOutput(input);
+    if (tcl_data.status == 0x7F) {
+        DOS_StringOutput("tcl_bridge not running.$");
+    } else {
+        input[tcl_data.input_size] = '$';
+        DOS_StringOutput(input);
+    }
     DOS_Exit0();
 }
 
