@@ -60,7 +60,6 @@ void main(u8 argc, c8** argv)
     } else if (tcl_data.input_size == 0) {
         DOS_StringOutput("Empty result.$");
     } else {
-        input[tcl_data.input_size == INPUT_MAX ? INPUT_MAX - 1 : tcl_data.input_size] = '$';
         for (int i = 0; i < tcl_data.input_size; ++i) {
             DOS_CharOutput(input[i]);
         }
