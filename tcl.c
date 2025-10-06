@@ -1,7 +1,9 @@
 // tcl.com v1.0 (c) 2025 Pedro de Medeiros
 //
+// tcl.com implements tcl_bridge as a reference implementation.
+//
 // tcl.com doesn't implement all details of tcl_bridge. Namely, it doesn't
-// treat input as a binary data.
+// treat command result as binary data.
 
 #include "msxgl.h"
 #include "dos.h"
@@ -17,7 +19,7 @@ struct {
     i8  status;         // offset + 10
 } tcl_data;
 
-#define INPUT_MAX 100
+#define INPUT_MAX 1000
 c8 input[INPUT_MAX] = {0};
 
 // Send command to Tcl engine
@@ -58,8 +60,10 @@ void main(u8 argc, c8** argv)
     } else if (tcl_data.input_size == 0) {
         DOS_StringOutput("Empty result.$");
     } else {
-        input[(tcl_data.input_size == INPUT_MAX ? 1 : 0)] = '$';
-        DOS_StringOutput(input);
+        input[tcl_data.input_size == INPUT_MAX ? INPUT_MAX - 1 : tcl_data.input_size] = '$';
+        for (int i = 0; i < tcl_data.input_size; ++i) {
+            DOS_CharOutput(input[i]);
+        }
     }
     DOS_Exit0();
 }
