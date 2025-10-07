@@ -61,8 +61,8 @@ void main(u8 argc, c8** argv)
     tcl_data.cmd_len      = String_Length(argv[0]);
     tcl_data.res_addr     = response;
     tcl_data.res_max_len  = RESPONSE_MAX;
-#ifdef MODIFIER
-    tcl_data.res_modifier = MODIFIER;
+#ifdef TEXT_MODE
+    tcl_data.res_modifier = 1;
 #else
     tcl_data.res_modifier = 0;
 #endif
