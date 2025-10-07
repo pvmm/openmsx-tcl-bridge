@@ -8,6 +8,7 @@
 #include "msxgl.h"
 #include "dos.h"
 #include "string.h"
+#include "memory.h"
 
 // Data to send to tcl_bridge
 struct {
@@ -21,6 +22,12 @@ struct {
 
 #define RESPONSE_MAX 1000
 c8 response[RESPONSE_MAX] = {0};
+
+#ifdef FORCE_TEXT_MODE
+
+#define CMD_MAX 288
+c8 prefixed_cmd[CMD_MAX] = "string map {\\n \\r\\n} [\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+#endif
 
 // Send command to Tcl engine
 void tcl(void* data)
@@ -56,8 +63,17 @@ void main(u8 argc, c8** argv)
     }
 
     // populate tcl_data and send to tcl_bridge
+    int arg_len = String_Length(argv[0]);
+#ifdef FORCE_TEXT_MODE
+    int prefixed_len = String_Length(prefixed_cmd);
+    Mem_Copy(argv[0], prefixed_cmd + prefixed_len, arg_len);
+    prefixed_cmd[prefixed_len + arg_len] = ']';
+    tcl_data.cmd_addr     = prefixed_cmd;
+    tcl_data.cmd_len      = prefixed_len + arg_len + 1;
+#else
     tcl_data.cmd_addr     = argv[0];
     tcl_data.cmd_len      = String_Length(argv[0]);
+#endif
     tcl_data.res_addr     = response;
     tcl_data.res_max_len  = RESPONSE_MAX;
     tcl_data.status       = 0x7F; // if this changes tcl_bridge is alive
