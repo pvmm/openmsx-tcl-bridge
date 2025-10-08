@@ -30,6 +30,10 @@ Just throw the directory inside a normal MSXgl install, specifically in the **pr
 ```
 build.sh
 ```
+If you want to compile a version of tcl.com that automatically transforms `\n` into `\r\n` to output the results to MSX-DOS screen, call:
+```
+build.sh define=TEXT_MODE
+```
 The resulting binary will be inside the **out** subdirectory.
 
 Related links
