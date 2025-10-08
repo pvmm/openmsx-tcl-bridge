@@ -26,7 +26,7 @@ tcl_bridge stop
 How to compile it
 -----------------
 
-Just throw the directory inside a normal MSXgl install, specifically in the **projects** subdirectory, then call:
+Just throw the directory inside a normal [MSXgl](https://github.com/aoineko-fr/MSXgl) install, specifically in the **projects** subdirectory, then call:
 ```
 build.sh
 ```
