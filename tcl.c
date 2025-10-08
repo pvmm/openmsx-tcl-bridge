@@ -9,6 +9,7 @@
 #include "dos.h"
 #include "string.h"
 #include "memory.h"
+#include "math.h"
 
 // Data to send to tcl_bridge
 struct {
@@ -27,6 +28,7 @@ c8 response[RESPONSE_MAX] = {0};
 
 #define CMD_MAX 288
 c8 prefixed_cmd[CMD_MAX] = "string map {\\n \\r\\n} [\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
+
 #endif
 
 // Send command to Tcl engine
@@ -85,14 +87,13 @@ void main(u8 argc, c8** argv)
         DOS_Exit0();
     }
     if (tcl_data.status == 1) DOS_StringOutput("Error: $");
-    if (tcl_data.res_real_len > tcl_data.res_max_len) {
-        print(response, tcl_data.res_max_len);
-        DOS_StringOutput("... truncated!\r\nBuffer too small to receive full result.$");
-    } else if (tcl_data.res_real_len == 0) {
-        DOS_StringOutput("Empty result.$");
-    } else {
-        print(response, tcl_data.res_real_len);
-    }
+    print(response, MIN(tcl_data.res_real_len, tcl_data.res_max_len));
+    if (tcl_data.res_real_len > tcl_data.res_max_len) DOS_StringOutput("... <truncated>$");
+
+#ifdef DOS2
+    DOS_Exit(tcl_data.status);
+#else
     DOS_Exit0();
+#endif
 }
 
