@@ -45,7 +45,8 @@ void main(u8 argc, c8** argv)
 {
     if (argc < 1) {
         DOS_StringOutput("tcl.com v1.0 (c) 2025 Pedro de Medeiros\r\n$");
-        DOS_StringOutput("No arguments provided.$");
+        DOS_StringOutput("No arguments provided.\r\n\r\n$");
+        DOS_StringOutput("Usage: tcl <Tcl command to execute>.$");
         DOS_Exit0();
     }
 
