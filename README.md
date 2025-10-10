@@ -12,7 +12,7 @@ The **tcl.com** MSX-DOS program requires the **tcl_bridge.tcl** script on OpenMS
 ```
 tcl_bridge start
 ```
-on the Tcl console to connect the receiving and sending ports on the MSX side (ports 6 and 7 respectively). Now you can for instance call:
+on the Tcl console to connect the sending data port on the MSX side (port#6). Now you can for instance call:
 ```
 tcl puts "Hello world"
 ```
