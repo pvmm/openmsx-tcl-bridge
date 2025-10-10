@@ -3,7 +3,7 @@
 openmsx-tcl-bridge
 ==================
 
-Guest machine side of mechanism that connects MSX-DOS to OpenMSX Tcl environment. This program uses a watchpoint to send responses back from Tcl to MSX-DOS, so it requires at least OpenMSX version 21.0.
+Guest machine side of mechanism that connects MSX-DOS to OpenMSX Tcl environment. This program uses a watchpoint to send responses back from Tcl to MSX-DOS.
 
 How to use it
 -------------
