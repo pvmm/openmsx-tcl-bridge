@@ -3,7 +3,7 @@
 openmsx-tcl-bridge
 ==================
 
-Guest machine side of mechanism that connects MSX-DOS to OpenMSX Tcl environment. This program uses the **Programmable Device** extension to send responses back from Tcl to MSX-DOS, so it requires at least OpenMSX version 21.0.
+Guest machine side of mechanism that connects MSX-DOS to OpenMSX Tcl environment. This program uses a watchpoint to send responses back from Tcl to MSX-DOS, so it requires at least OpenMSX version 21.0.
 
 How to use it
 -------------
@@ -34,6 +34,8 @@ If you want to compile a version of tcl.com that automatically transforms `\n` i
 ```
 build.sh define=TEXT_MODE
 ```
+then it will automatically wrap any command with `string map [\n \r\n] [<command>]` and use Tcl itself to convert the response before sending it to the MSX.
+
 The resulting binary will be inside the **out** subdirectory.
 
 Related links
