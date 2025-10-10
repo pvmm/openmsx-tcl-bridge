@@ -8,8 +8,7 @@
 #include "msxgl.h"
 #include "dos.h"
 #include "string.h"
-#include "memory.h"
-#include "math.h"
+#include "cmd.h"
 
 // Data to send to tcl_bridge
 struct {
@@ -21,17 +20,9 @@ struct {
     i8  status;         // offset + 10
 } tcl_data;
 
-#define RESPONSE_MAX 1000
-c8 response[RESPONSE_MAX] = {0};
+// RESPONSE_MAX uses memory after program's end, so it can use much more memory
+#define RESPONSE_MAX 30000
 
-#ifdef FORCE_TEXT_MODE
-
-#define CMD_MAX 289
-c8 prefixed_cmd[CMD_MAX] = "string map {\\n \\r\\n} [\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0";
-
-#endif
-
-// Send command to Tcl engine
 void tcl(void* data)
 {
     data; // assumption: hl <- data
@@ -66,20 +57,23 @@ void main(u8 argc, c8** argv)
 
     // populate tcl_data and send to tcl_bridge
     int arg_len = String_Length(argv[0]);
+
 #ifdef FORCE_TEXT_MODE
-    int prefixed_len = String_Length(prefixed_cmd);
-    Mem_Copy(argv[0], prefixed_cmd + prefixed_len, arg_len);
-    prefixed_cmd[prefixed_len + arg_len] = ']';
-    tcl_data.cmd_addr     = prefixed_cmd;
-    tcl_data.cmd_len      = prefixed_len + arg_len + 1;
+    int cmd_len = String_Length(cmd_buf);
+    Mem_Copy(argv[0], cmd_buf + cmd_len, arg_len);
+    cmd_buf[cmd_len + arg_len + 0] = ']';
+    cmd_buf[cmd_len + arg_len + 1] = '\0';
+    tcl_data.cmd_addr     = cmd_buf;
+    tcl_data.cmd_len      = cmd_len + arg_len + 1;
 #else
     tcl_data.cmd_addr     = argv[0];
     tcl_data.cmd_len      = String_Length(argv[0]);
 #endif
-    tcl_data.res_addr     = response;
+    tcl_data.res_addr     = cmd_buf;
     tcl_data.res_max_len  = RESPONSE_MAX;
     tcl_data.status       = 0x7F; // if this changes tcl_bridge is alive
 
+    // Send command to Tcl engine
     tcl(&tcl_data); // here tcl_data fields are magically filled in...
 
     if (tcl_data.status == 0x7F) {
@@ -87,13 +81,8 @@ void main(u8 argc, c8** argv)
         DOS_Exit0();
     }
     if (tcl_data.status == 1) DOS_StringOutput("Error: $");
-    print(response, MIN(tcl_data.res_real_len, tcl_data.res_max_len));
+    print(tcl_data.res_addr, MIN(tcl_data.res_real_len, tcl_data.res_max_len));
     if (tcl_data.res_real_len > tcl_data.res_max_len) DOS_StringOutput("... <truncated>$");
 
-#ifdef DOS2
     DOS_Exit(tcl_data.status);
-#else
-    DOS_Exit0();
-#endif
 }
-

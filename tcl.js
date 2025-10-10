@@ -12,7 +12,10 @@ Target = "DOS1";
 DOSParseArg = true;
 
 //-- List of library modules to build (array)
-LibModules = [ "dos", "memory" ];
+LibModules = [ "dos" ];
+
+// -- Add source files
+AddSources = [ "cmd.c" ];
 
 //-- List of data files to copy to disk (array)
 DiskFiles = [];

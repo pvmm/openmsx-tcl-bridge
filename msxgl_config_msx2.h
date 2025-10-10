@@ -182,6 +182,7 @@
 #define DOS_USE_HANDLE				TRUE	// Add support for file managment features through file handle
 #define DOS_USE_UTILITIES			TRUE	// Add support for file managment features through filename
 #define DOS_USE_VALIDATOR			TRUE	// Add support for last error backup and return value validation
+#define DOS_USE_ERROR_HANDLER			FALSE
 
 //-----------------------------------------------------------------------------
 // CLOCK MODULE
