@@ -171,7 +171,7 @@
 #define MEM_USE_VALIDATOR			FALSE	// Activate validator to handle invalide input value
 #define MEM_USE_FASTCOPY			FALSE	// Add support for fast-copy function (using unrolled-LDI loop)
 #define MEM_USE_FASTSET				FALSE	// Add support for fast-set function (using unrolled-LDI loop)
-#define MEM_USE_DYNAMIC				TRUE	// Add support for malloc style dynamic allocator
+#define MEM_USE_DYNAMIC				FALSE   // Add support for malloc style dynamic allocator
 #define MEM_USE_BUILTIN				TRUE	// Use SDCC built-in memcpy and memset function instead of MSXgl ones
 
 //-----------------------------------------------------------------------------
@@ -601,3 +601,5 @@
 // - PROFILE_OPENMSX_S ............ Profiler features for openMSX using Salutte script (tools/script/openMSX/profiler_salutte.tcl)
 #define PROFILE_TOOL				PROFILE_DISABLE
 #define PROFILE_LEVEL				10
+
+#define INPUT_HOLD_SIGNAL TRUE
